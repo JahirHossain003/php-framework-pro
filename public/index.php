@@ -3,6 +3,8 @@
 use Jahir\Framework\Http\Kernel;
 use Jahir\Framework\Http\Request;
 
+define('BASE_PATH', dirname(__DIR__));
+
 require_once dirname(__DIR__).'/vendor/autoload.php';
 
 
