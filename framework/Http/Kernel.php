@@ -2,24 +2,23 @@
 
 namespace Jahir\Framework\Http;
 
-use FastRoute\RouteCollector;
-use function FastRoute\simpleDispatcher;
+use Jahir\Framework\Routing\RouterInterface;
 
 class Kernel
 {
+    public function __construct(private RouterInterface $router)
+    {
+    }
+
     public function handle(Request $request): Response
     {
-        $dispatcher = simpleDispatcher(function (RouteCollector $collector) {
-            $routes = include BASE_PATH.'/route/web.php';
-            foreach ($routes as $route) {
-                $collector->addRoute(...$route);
-            }
-        });
+        try {
+            [$routeHandler, $vars] = $this->router->dispatch($request);
+            $response = call_user_func_array($routeHandler, $vars);
+        } catch (\Exception $exception) {
+            $response = new Response($exception->getMessage());
+        }
 
-        $routeInfo = $dispatcher->dispatch($request->getMethod(), $request->getPathInfo());
-
-        [$status, [$controller, $method], $vars] = $routeInfo;
-
-        return call_user_func_array([new $controller, $method], $vars);
+        return $response;
     }
 }
