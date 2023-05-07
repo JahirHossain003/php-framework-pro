@@ -1,0 +1,23 @@
+{
+  "name": "jahir/php-framework-pro",
+  "description": "Learn how framework works under the hood",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "jahirhossain",
+      "email": "jahir003@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Jahir\\Framework\\": "src/"
+    }
+  },
+  "require-dev": {
+    "symfony/var-dumper": "^6.2"
+  },
+  "require": {
+    "nikic/fast-route": "dev-master"
+  }
+}
