@@ -45,9 +45,13 @@ class Router implements RouterInterface
                 return [$routeInfo[1], $routeInfo[2]];
             case Dispatcher::METHOD_NOT_ALLOWED:
                 $allowedMethods = implode(", ", $routeInfo[1]);
-                throw new HttpMethodNotFoundException("Only following methods are allowed: ".$allowedMethods);
+                $exception = new HttpMethodNotFoundException("Only following methods are allowed: ".$allowedMethods);
+                $exception->setStatus(405);
+                throw $exception;
             default:
-                throw new HttpException("Method not found");
+                $exception = new HttpException("Not found");
+                $exception->setStatus(404);
+                throw $exception;
         }
     }
 }

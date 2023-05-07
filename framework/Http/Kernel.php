@@ -2,6 +2,7 @@
 
 namespace Jahir\Framework\Http;
 
+use Jahir\Framework\Http\Exception\HttpException;
 use Jahir\Framework\Routing\RouterInterface;
 
 class Kernel
@@ -15,8 +16,10 @@ class Kernel
         try {
             [$routeHandler, $vars] = $this->router->dispatch($request);
             $response = call_user_func_array($routeHandler, $vars);
+        } catch (HttpException $exception) {
+            $response = new Response($exception->getMessage(), $exception->getStatus());
         } catch (\Exception $exception) {
-            $response = new Response($exception->getMessage());
+            $response = new Response($exception->getMessage(), 500);
         }
 
         return $response;
