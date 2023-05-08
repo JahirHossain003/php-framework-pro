@@ -4,6 +4,8 @@ namespace Jahir\Framework\Http;
 
 class Response
 {
+    public const SERVER_ERROR = 500;
+
     public function __construct(
         private readonly ?string $content ='',
         private int              $status = 200,
