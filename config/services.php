@@ -7,11 +7,15 @@ use League\Container\Argument\Literal\ArrayArgument;
 use League\Container\Argument\Literal\StringArgument;
 use League\Container\Container;
 use League\Container\ReflectionContainer;
+use Symfony\Component\Dotenv\Dotenv;
+
+$dotEnv = new Dotenv();
+$dotEnv->load(BASE_PATH.'/.env');
 
 $container = new Container();
 
 $container->delegate(new ReflectionContainer(true));
-$container->add('APP_ENV', new StringArgument("dev"));
+$container->add('APP_ENV', new StringArgument($_SERVER['APP_ENV']));
 
 $routes = include BASE_PATH.'/route/web.php';
 
