@@ -7,6 +7,7 @@ use FastRoute\RouteCollector;
 use Jahir\Framework\Http\Exception\HttpException;
 use Jahir\Framework\Http\Exception\HttpMethodNotFoundException;
 use Jahir\Framework\Http\Request;
+use Psr\Container\ContainerInterface;
 use function FastRoute\simpleDispatcher;
 
 class Router implements RouterInterface
@@ -14,18 +15,21 @@ class Router implements RouterInterface
     private array $routes = [];
 
     /**
+     * @param Request $request
+     * @param ContainerInterface $container
      * @throws HttpException
      * @throws HttpMethodNotFoundException
      */
-    public function dispatch(Request $request): array
+    public function dispatch(Request $request, ContainerInterface $container): array
     {
         $routeInfo = $this->getRouteInfo($request);
 
         [$handler, $vars] = $routeInfo;
 
         if (is_array($handler)) {
-            [$controller, $method] = $handler;
-            $handler = [new $controller, $method];
+            [$controllerId, $method] = $handler;
+            $controller = $container->get($controllerId);
+            $handler = [$controller, $method];
         }
 
         return [$handler, $vars];
