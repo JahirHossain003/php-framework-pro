@@ -2,13 +2,13 @@
 
 namespace App\Controller;
 
+use Jahir\Framework\Controller\AbstractController;
 use Jahir\Framework\Http\Response;
 
-class PostsController
+class PostsController extends AbstractController
 {
     public function show(int $id): Response
     {
-        $content = "<h1>This is Post {$id}</h1>";
-        return new Response($content);
+       return $this->render('post.html.twig', ['postId' => $id]);
     }
 }

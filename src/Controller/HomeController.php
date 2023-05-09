@@ -9,8 +9,6 @@ class HomeController extends AbstractController
 {
     public function index(): Response
     {
-        dd($this->container->get('twig'));
-        $content = "<h1>Hello World</h1>";
-        return new Response($content);
+        return $this->render('home.html.twig');
     }
 }
