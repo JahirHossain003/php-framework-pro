@@ -7,5 +7,5 @@ use Jahir\framework\src\Http\Response;
 return [
   ['GET', '/', [HomeController::class, 'index']],
   ['GET', '/posts/{id:\d+}', [PostsController::class, 'show']],
-  ['GET', '/hello/{name:.+}', fn(string $name) => new Response('Hello '.$name)],
+  ['GET', '/posts', [PostsController::class, 'create']]
 ];
