@@ -25,6 +25,7 @@ $container = new Container();
 
 $container->delegate(new ReflectionContainer(true));
 $container->add('APP_ENV', new StringArgument($_SERVER['APP_ENV']));
+$container->add('base-command-namespace', new StringArgument('Jahir\\Framework\\Console\\Command\\'));
 
 $routes = include BASE_PATH.'/route/web.php';
 
@@ -54,8 +55,11 @@ $container->add(ConnectionFactory::class)
         new StringArgument($databaseUrl)
     ]);
 
-$container->addShared(\Doctrine\DBAL\Connection::class, function () use ($container): \Doctrine\DBAL\Connection {
+$container->addShared(Connection::class, function () use ($container): Connection {
     return $container->get(ConnectionFactory::class)->create();
 });
+
+$container->add(\Jahir\Framework\Console\Kernel::class)
+    ->addArgument($container);
 
 return $container;
