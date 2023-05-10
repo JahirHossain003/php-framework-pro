@@ -26,11 +26,28 @@ class Application
          $command = $this->container->get($commandName);
 
         // Parse variables to obtain options and args
+        $argv = array_slice($argv, 2);
+
+        $options = $this->parseOptions($argv);
 
         // Execute the command, returning the status code
-         $status = $command->execute();
+        $status = $command->execute($options);
 
         // Return the status code
         return $status;
+    }
+
+    private function parseOptions(array $argvs): array
+    {
+        $options = [];
+
+        foreach ($argvs as $arg) {
+            if (str_starts_with($arg, '--')) {
+                $option = explode('=',substr($arg, 2));
+                $options[$option[0]] = $option[1] ?? true;
+            }
+        }
+
+        return $options;
     }
 }

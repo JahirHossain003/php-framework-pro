@@ -8,7 +8,6 @@ class MigrateDatabase implements CommandInterface
 
     public function execute(array $params = []): int
     {
-
         echo 'Executing MigrateDatabase command' . PHP_EOL;
 
         return 0;
