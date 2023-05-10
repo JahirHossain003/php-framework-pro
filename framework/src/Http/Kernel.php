@@ -2,6 +2,7 @@
 
 namespace Jahir\Framework\Http;
 
+use Doctrine\DBAL\Connection;
 use Jahir\Framework\Http\Exception\HttpException;
 use Jahir\Framework\Routing\RouterInterface;
 use Psr\Container\ContainerInterface;
@@ -17,6 +18,9 @@ class Kernel
 
     public function handle(Request $request): Response
     {
+
+       // dd($this->container->get(Connection::class));
+
         try {
             [$routeHandler, $vars] = $this->router->dispatch($request, $this->container);
             $response = call_user_func_array($routeHandler, $vars);

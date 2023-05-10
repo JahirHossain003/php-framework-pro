@@ -2,7 +2,6 @@
 
 use App\Controller\HomeController;
 use App\Controller\PostsController;
-use Jahir\framework\src\Http\Response;
 
 return [
   ['GET', '/', [HomeController::class, 'index']],

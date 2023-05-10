@@ -1,6 +1,8 @@
 <?php
 
+use Doctrine\DBAL\Connection;
 use Jahir\Framework\Controller\AbstractController;
+use Jahir\Framework\Dbal\ConnectionFactory;
 use Jahir\Framework\Http\Kernel;
 use Jahir\Framework\Routing\Router;
 use Jahir\Framework\Routing\RouterInterface;
@@ -16,6 +18,8 @@ $dotEnv = new Dotenv();
 $dotEnv->load(BASE_PATH.'/.env');
 
 $templatePath = BASE_PATH.'/templates';
+
+$databaseUrl = "sqlite:///".BASE_PATH.'/var/db.sqlite';
 
 $container = new Container();
 
@@ -43,5 +47,15 @@ $container->add(AbstractController::class);
 
 $container->inflector(AbstractController::class)
     ->invokeMethod('setContainer', [$container]);
+
+
+$container->add(ConnectionFactory::class)
+    ->addArguments([
+        new StringArgument($databaseUrl)
+    ]);
+
+$container->addShared(\Doctrine\DBAL\Connection::class, function () use ($container): \Doctrine\DBAL\Connection {
+    return $container->get(ConnectionFactory::class)->create();
+});
 
 return $container;

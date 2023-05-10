@@ -28,6 +28,7 @@
     "psr/container": "^2.0",
     "league/container": "^4.0.0",
     "symfony/dotenv": "^v6.0.0",
-    "twig/twig": "^3.0.0"
+    "twig/twig": "^3.0.0",
+    "doctrine/dbal": "^3.0"
   }
 }
