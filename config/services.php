@@ -1,6 +1,7 @@
 <?php
 
 use Doctrine\DBAL\Connection;
+use Jahir\Framework\Console\Application;
 use Jahir\Framework\Controller\AbstractController;
 use Jahir\Framework\Dbal\ConnectionFactory;
 use Jahir\Framework\Http\Kernel;
@@ -38,6 +39,12 @@ $container->add(Kernel::class)
     ->addArgument(RouterInterface::class)
     ->addArgument($container);
 
+$container->add(Application::class)
+    ->addArgument($container);
+
+$container->add(\Jahir\Framework\Console\Kernel::class)
+    ->addArguments([$container, Application::class]);
+
 $container->addShared('filesystem-loader', FilesystemLoader::class)
     ->addArgument(new StringArgument($templatePath));
 
@@ -59,7 +66,5 @@ $container->addShared(Connection::class, function () use ($container): Connectio
     return $container->get(ConnectionFactory::class)->create();
 });
 
-$container->add(\Jahir\Framework\Console\Kernel::class)
-    ->addArgument($container);
 
 return $container;
