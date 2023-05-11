@@ -16,24 +16,32 @@ class MigrateDatabase implements CommandInterface
 
     public function execute(array $params = []): int
     {
-        // Create a migrations table SQL if table not already in existence
-        $this->createMigrationsTable();
+        try {
+            // Create a migrations table SQL if table not already in existence
+            $this->createMigrationsTable();
 
-        // Get $appliedMigrations which are already in the database.migrations table
+            $this->connection->beginTransaction();
 
-        // Get the $migrationFiles from the migrations folder
+            // Get $appliedMigrations which are already in the database.migrations table
 
-        // Get the migrations to apply. i.e. they are in $migrationFiles but not in $appliedMigrations
+            // Get the $migrationFiles from the migrations folder
 
-        // Create SQL for any migrations which have not been run ..i.e. which are not in the database
+            // Get the migrations to apply. i.e. they are in $migrationFiles but not in $appliedMigrations
 
-        // Add migration to database
+            // Create SQL for any migrations which have not been run ..i.e. which are not in the database
 
-        // Execute the SQL query
+            // Add migration to database
 
-        echo 'Executing MigrateDatabase command' . PHP_EOL;
+            // Execute the SQL query
+            $this->connection->commit();
 
-        return 0;
+            echo 'Executing MigrateDatabase command' . PHP_EOL;
+
+            return 0;
+        } catch (\Throwable $throwable) {
+            $this->connection->rollBack();
+            throw $throwable;
+        }
     }
 
     private function createMigrationsTable()
