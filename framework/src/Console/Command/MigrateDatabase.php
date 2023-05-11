@@ -23,6 +23,7 @@ class MigrateDatabase implements CommandInterface
             $this->connection->beginTransaction();
 
             // Get $appliedMigrations which are already in the database.migrations table
+            $appliedMigrations = $this->getAppliedMigrations();
 
             // Get the $migrationFiles from the migrations folder
 
@@ -61,5 +62,14 @@ class MigrateDatabase implements CommandInterface
 
             echo 'Migrations table created'.PHP_EOL;
         }
+    }
+
+    private function getAppliedMigrations(): array
+    {
+        $sql = "Select migration from migrations";
+
+        $appliedMigrations = $this->connection->executeQuery($sql)->fetchFirstColumn();
+
+        return $appliedMigrations;
     }
 }
