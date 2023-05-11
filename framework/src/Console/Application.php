@@ -23,7 +23,7 @@ class Application
         }
 
         // Use command name to obtain a command object from the container
-         $command = $this->container->get($commandName);
+        $command = $this->container->get($commandName);
 
         // Parse variables to obtain options and args
         $argv = array_slice($argv, 2);

@@ -2,6 +2,7 @@
 
 use Doctrine\DBAL\Connection;
 use Jahir\Framework\Console\Application;
+use Jahir\Framework\Console\Command\MigrateDatabase;
 use Jahir\Framework\Controller\AbstractController;
 use Jahir\Framework\Dbal\ConnectionFactory;
 use Jahir\Framework\Http\Kernel;
@@ -18,18 +19,20 @@ use Twig\Loader\FilesystemLoader;
 $dotEnv = new Dotenv();
 $dotEnv->load(BASE_PATH.'/.env');
 
-$templatePath = BASE_PATH.'/templates';
-
-$databaseUrl = "sqlite:///".BASE_PATH.'/var/db.sqlite';
-
 $container = new Container();
-
 $container->delegate(new ReflectionContainer(true));
-$container->add('APP_ENV', new StringArgument($_SERVER['APP_ENV']));
-$container->add('base-command-namespace', new StringArgument('Jahir\\Framework\\Console\\Command\\'));
+
 
 $routes = include BASE_PATH.'/route/web.php';
+$templatePath = BASE_PATH.'/templates';
 
+$databaseUrl = 'sqlite:///' . BASE_PATH . '/var/db.sqlite';
+
+$container->add('APP_ENV', new StringArgument($_SERVER['APP_ENV']));
+
+$container->add('base-command-namespace', new StringArgument('Jahir\\Framework\\Console\\Command\\'));
+
+## Services
 $container->add(RouterInterface::class, Router::class);
 
 $container->extend(RouterInterface::class)
@@ -66,5 +69,7 @@ $container->addShared(Connection::class, function () use ($container): Connectio
     return $container->get(ConnectionFactory::class)->create();
 });
 
+$container->add('database:migrations:migrate', MigrateDatabase::class)
+    ->addArgument(Connection::class);
 
 return $container;

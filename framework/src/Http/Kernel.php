@@ -18,7 +18,6 @@ class Kernel
 
     public function handle(Request $request): Response
     {
-
        // dd($this->container->get(Connection::class));
 
         try {
