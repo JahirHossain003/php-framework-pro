@@ -10,7 +10,10 @@ class MigrateDatabase implements CommandInterface
 {
     private string $name = 'database:migrations:migrate';
 
-    public function __construct(private Connection $connection)
+    public function __construct(
+        private Connection $connection,
+        private string $migrationFilePath
+    )
     {
     }
 
@@ -26,17 +29,31 @@ class MigrateDatabase implements CommandInterface
             $appliedMigrations = $this->getAppliedMigrations();
 
             // Get the $migrationFiles from the migrations folder
+            $migrationFiles = $this->getMigrationFiles();
 
             // Get the migrations to apply. i.e. they are in $migrationFiles but not in $appliedMigrations
+            $migrations = array_diff($migrationFiles, $appliedMigrations);
 
-            // Create SQL for any migrations which have not been run ..i.e. which are not in the database
+            $schema = new Schema();
 
-            // Add migration to database
+            foreach ($migrations as $migration) {
+                // Create SQL for any migrations which have not been run ..i.e. which are not in the database
+                $migrationClass = require_once $this->migrationFilePath.'/'.$migration;
+
+                $migrationClass->up($schema);
+
+                // Add migration to database
+                $this->insertMigration($migration);
+            }
+
+            $sqlArray = $schema->toSql($this->connection->getDatabasePlatform());
+
+            foreach ($sqlArray as $sql) {
+                $this->connection->executeQuery($sql);
+            }
 
             // Execute the SQL query
             $this->connection->commit();
-
-            echo 'Executing MigrateDatabase command' . PHP_EOL;
 
             return 0;
         } catch (\Throwable $throwable) {
@@ -71,5 +88,25 @@ class MigrateDatabase implements CommandInterface
         $appliedMigrations = $this->connection->executeQuery($sql)->fetchFirstColumn();
 
         return $appliedMigrations;
+    }
+
+    private function getMigrationFiles()
+    {
+        $files = scandir($this->migrationFilePath);
+        $files = array_filter($files, function ($file) {
+           return !in_array($file, ['.','..']);
+        });
+        return $files;
+    }
+
+    private function insertMigration(string $migration): void
+    {
+        $sql = "INSERT INTO migrations (migration) VALUES(?)";
+
+        $stmt = $this->connection->prepare($sql);
+
+        $stmt->bindValue(1, $migration);
+
+        $stmt->executeStatement();
     }
 }

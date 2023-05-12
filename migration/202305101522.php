@@ -1,11 +1,17 @@
 <?php
 
-return new class {
-    public function up(): void
-    {
-        // Table creation / modification code goes here
+use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Types\Types;
 
-        echo get_class($this) . ' "up" method called' . PHP_EOL;
+return new class {
+    public function up(Schema $schema): void
+    {
+        $table = $schema->createTable('posts');
+        $table->addColumn('id', Types::INTEGER, ['unsigned' => true, 'autoincrement' => true]);
+        $table->addColumn('title', Types::STRING, ['length' => 255]);
+        $table->addColumn('body', Types::TEXT);
+        $table->addColumn('created_at', Types::DATETIME_IMMUTABLE, ['default' => 'CURRENT_TIMESTAMP']);
+        $table->setPrimaryKey(['id']);
     }
 
     public function down(): void
