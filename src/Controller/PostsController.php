@@ -4,18 +4,24 @@ namespace App\Controller;
 
 use App\Entity\Post;
 use App\Repository\PostDataMapper;
+use App\Repository\PostRepository;
 use Jahir\Framework\Controller\AbstractController;
 use Jahir\Framework\Http\Response;
 
 class PostsController extends AbstractController
 {
-    public function __construct(private PostDataMapper $postDataMapper)
+    public function __construct(
+        private PostDataMapper $postDataMapper,
+        private PostRepository $postRepository
+    )
     {
     }
 
     public function show(int $id): Response
     {
-       return $this->render('post.html.twig', ['postId' => $id]);
+        $post = $this->postRepository->fetchById($id);
+
+        return $this->render('post.html.twig', ['post' => $post]);
     }
 
     public function create(): Response
