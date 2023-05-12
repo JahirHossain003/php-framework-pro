@@ -19,7 +19,7 @@ class PostsController extends AbstractController
 
     public function show(int $id): Response
     {
-        $post = $this->postRepository->fetchById($id);
+        $post = $this->postRepository->findOrFail($id);
 
         return $this->render('post.html.twig', ['post' => $post]);
     }
