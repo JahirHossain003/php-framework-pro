@@ -6,6 +6,7 @@ use App\Entity\Post;
 use App\Repository\PostDataMapper;
 use App\Repository\PostRepository;
 use Jahir\Framework\Controller\AbstractController;
+use Jahir\Framework\Http\RedirectResponse;
 use Jahir\Framework\Http\Response;
 
 class PostsController extends AbstractController
@@ -29,7 +30,7 @@ class PostsController extends AbstractController
         return $this->render('create-post.html.twig');
     }
 
-    public function store(): void
+    public function store(): Response
     {
         $title = $this->request->postParams['title'];
         $body = $this->request->postParams['body'];
@@ -38,6 +39,6 @@ class PostsController extends AbstractController
 
         $this->postDataMapper->save($post);
 
-        dd($post);
+        return new RedirectResponse('/posts');
     }
 }
