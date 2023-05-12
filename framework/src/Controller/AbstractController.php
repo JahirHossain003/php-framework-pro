@@ -2,6 +2,7 @@
 
 namespace Jahir\Framework\Controller;
 
+use Jahir\Framework\Http\Request;
 use Jahir\Framework\Http\Response;
 use Psr\Container\ContainerInterface;
 use Twig\Environment;
@@ -9,10 +10,16 @@ use Twig\Environment;
 abstract class AbstractController
 {
     protected ?ContainerInterface $container = null;
+    protected Request $request;
 
     public function setContainer(ContainerInterface $container): void
     {
         $this->container = $container;
+    }
+
+    public function setRequest(Request $request): void
+    {
+        $this->request = $request;
     }
 
     public function render(string $template, array $params = [], Response $response = null): Response

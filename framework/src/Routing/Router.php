@@ -4,6 +4,7 @@ namespace Jahir\Framework\Routing;
 
 use FastRoute\Dispatcher;
 use FastRoute\RouteCollector;
+use Jahir\Framework\Controller\AbstractController;
 use Jahir\Framework\Http\Exception\HttpException;
 use Jahir\Framework\Http\Exception\HttpMethodNotFoundException;
 use Jahir\Framework\Http\Request;
@@ -29,6 +30,10 @@ class Router implements RouterInterface
         if (is_array($handler)) {
             [$controllerId, $method] = $handler;
             $controller = $container->get($controllerId);
+
+            if (is_subclass_of($controller, AbstractController::class)) {
+              $controller->setRequest($request);
+            }
             $handler = [$controller, $method];
         }
 

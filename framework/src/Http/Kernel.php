@@ -18,8 +18,6 @@ class Kernel
 
     public function handle(Request $request): Response
     {
-       // dd($this->container->get(Connection::class));
-
         try {
             [$routeHandler, $vars] = $this->router->dispatch($request, $this->container);
             $response = call_user_func_array($routeHandler, $vars);
