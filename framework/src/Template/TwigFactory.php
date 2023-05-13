@@ -28,7 +28,7 @@ class TwigFactory
         return $twigEnvironment;
     }
 
-    private function getSession(): SessionInterface
+    public function getSession(): SessionInterface
     {
         return $this->session;
     }
