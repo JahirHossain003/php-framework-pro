@@ -48,11 +48,17 @@ $container->add(Application::class)
 $container->add(\Jahir\Framework\Console\Kernel::class)
     ->addArguments([$container, Application::class]);
 
-$container->addShared('filesystem-loader', FilesystemLoader::class)
-    ->addArgument(new StringArgument($templatePath));
+$container->addShared(
+    \Jahir\Framework\Session\SessionInterface::class,
+    \Jahir\Framework\Session\Session::class
+);
 
-$container->addShared('twig', Environment::class)
-    ->addArgument('filesystem-loader');
+$container->add('twig-template-factory', \Jahir\Framework\Template\TwigFactory::class)
+    ->addArguments([\Jahir\Framework\Session\SessionInterface::class, new StringArgument($templatePath)]);
+
+$container->addShared('twig', function () use ($container) {
+   return $container->get('twig-template-factory')->create();
+});
 
 $container->add(AbstractController::class);
 
