@@ -38,9 +38,16 @@ $container->add(RouterInterface::class, Router::class);
 $container->extend(RouterInterface::class)
     ->addMethodCall('setRoutes', [new ArrayArgument($routes)]);
 
+$container->add(
+    \Jahir\Framework\Http\Middleware\RequestHandlerInterface::class,
+    \Jahir\Framework\Http\Middleware\RequestHandler::class);
+
 $container->add(Kernel::class)
-    ->addArgument(RouterInterface::class)
-    ->addArgument($container);
+    ->addArguments([
+        RouterInterface::class,
+        $container,
+        \Jahir\Framework\Http\Middleware\RequestHandlerInterface::class
+        ]);
 
 $container->add(Application::class)
     ->addArgument($container);
