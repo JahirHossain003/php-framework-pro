@@ -43,9 +43,15 @@ $container->add(
     \Jahir\Framework\Http\Middleware\RequestHandler::class)
 ->addArgument($container);
 
+$container->add(
+    \Jahir\Framework\Http\Middleware\RouterDispatch::class
+)->addArguments([
+   RouterInterface::class,
+   $container
+]);
+
 $container->add(Kernel::class)
     ->addArguments([
-        RouterInterface::class,
         $container,
         \Jahir\Framework\Http\Middleware\RequestHandlerInterface::class
         ]);

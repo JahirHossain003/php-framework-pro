@@ -2,11 +2,8 @@
 
 namespace Jahir\Framework\Http;
 
-use Doctrine\DBAL\Connection;
 use Jahir\Framework\Http\Exception\HttpException;
-use Jahir\Framework\Http\Middleware\MiddlewareInterface;
 use Jahir\Framework\Http\Middleware\RequestHandlerInterface;
-use Jahir\Framework\Routing\RouterInterface;
 use Psr\Container\ContainerInterface;
 
 class Kernel
@@ -14,7 +11,6 @@ class Kernel
     private string $appEnv;
 
     public function __construct(
-        private RouterInterface $router,
         private ContainerInterface $container,
         private RequestHandlerInterface $handler
     )
@@ -26,9 +22,6 @@ class Kernel
     {
         try {
             $response = $this->handler->handle($request);
-
-           /* [$routeHandler, $vars] = $this->router->dispatch($request, $this->container);
-            $response = call_user_func_array($routeHandler, $vars);*/
         } catch (\Exception $exception) {
             $response = $this->createExceptionResponse($exception);
         }
