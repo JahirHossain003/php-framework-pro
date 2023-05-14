@@ -40,7 +40,8 @@ $container->extend(RouterInterface::class)
 
 $container->add(
     \Jahir\Framework\Http\Middleware\RequestHandlerInterface::class,
-    \Jahir\Framework\Http\Middleware\RequestHandler::class);
+    \Jahir\Framework\Http\Middleware\RequestHandler::class)
+->addArgument($container);
 
 $container->add(Kernel::class)
     ->addArguments([
