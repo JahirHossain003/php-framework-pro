@@ -2,8 +2,12 @@
 
 namespace Jahir\Framework\Http;
 
+use Jahir\Framework\Session\SessionInterface;
+
 class Request
 {
+    private SessionInterface $session;
+
     public function __construct(
         public readonly array $getParams,
         public readonly array $postParams,
@@ -27,4 +31,15 @@ class Request
     {
         return strtok($this->server['REQUEST_URI'], '?');
     }
+
+    public function getSession(): SessionInterface
+    {
+        return $this->session;
+    }
+
+    public function setSession(SessionInterface $session): void
+    {
+        $this->session = $session;
+    }
+
 }

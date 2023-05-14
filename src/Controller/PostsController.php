@@ -8,15 +8,12 @@ use App\Repository\PostRepository;
 use Jahir\Framework\Controller\AbstractController;
 use Jahir\Framework\Http\RedirectResponse;
 use Jahir\Framework\Http\Response;
-use Jahir\Framework\Session\SessionInterface;
 
 class PostsController extends AbstractController
 {
     public function __construct(
         private PostDataMapper $postDataMapper,
-        private PostRepository $postRepository,
-        private SessionInterface $session
-    )
+        private PostRepository $postRepository )
     {
     }
 
@@ -41,7 +38,7 @@ class PostsController extends AbstractController
 
         $this->postDataMapper->save($post);
 
-        $this->session->setFlash('success', sprintf('Post "%s" successfully created.', $title));
+        $this->request->getSession()->setFlash('success', sprintf('Post "%s" successfully created.', $title));
 
         return new RedirectResponse('/posts');
     }
