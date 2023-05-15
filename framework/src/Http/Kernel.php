@@ -44,4 +44,9 @@ class Kernel
 
         return new Response($exception->getMessage(), Response::SERVER_ERROR);
     }
+
+    public function terminate(Request $request, Response $response): void
+    {
+        $request->getSession()?->clearFlash();
+    }
 }
