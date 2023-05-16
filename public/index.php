@@ -11,6 +11,10 @@ $container = require BASE_PATH.'/config/services.php';
 
 $eventDispatcher = $container->get(\Jahir\Framework\EventDispatcher\EventDispatcher::class);
 $eventDispatcher->addListener(
+    \Jahir\Framework\Http\Event\ResponseEvent::class,
+    new \App\EventListener\InternalErrorListener()
+)
+    ->addListener(
   \Jahir\Framework\Http\Event\ResponseEvent::class,
   new \Jahir\Framework\EventListener\ContentLengthListener()
 );

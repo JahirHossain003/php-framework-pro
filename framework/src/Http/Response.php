@@ -49,4 +49,12 @@ class Response
     {
         return $this->content;
     }
+
+    /**
+     * @param int $status
+     */
+    public function setStatus(int $status): void
+    {
+        $this->status = $status;
+    }
 }

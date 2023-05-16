@@ -12,7 +12,7 @@ abstract class Event implements StoppableEventInterface
         return $this->propagationStop;
     }
 
-    public function shopPropagation(): void
+    public function stopPropagation(): void
     {
         $this->propagationStop = true;
     }
