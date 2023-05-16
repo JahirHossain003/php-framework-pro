@@ -92,4 +92,10 @@ $container->addShared(Connection::class, function () use ($container): Connectio
 $container->add('database:migrations:migrate', MigrateDatabase::class)
     ->addArguments([Connection::class, new StringArgument(BASE_PATH.'/migration')]);
 
+$container->add(\Jahir\Framework\Authentication\SessionAuthentication::class)
+    ->addArguments([
+        \App\Repository\UserRepository::class,
+        \Jahir\Framework\Session\SessionInterface::class
+    ]);
+
 return $container;

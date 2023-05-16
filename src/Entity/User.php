@@ -2,7 +2,9 @@
 
 namespace App\Entity;
 
-class User
+use Jahir\Framework\Authentication\AuthUserInterface;
+
+class User implements AuthUserInterface
 {
     public function __construct(
         private ?int $id,
@@ -61,5 +63,10 @@ class User
     public function setId(?int $id): void
     {
         $this->id = $id;
+    }
+
+    public function getAuthId(): int|string
+    {
+        return $this->id;
     }
 }
