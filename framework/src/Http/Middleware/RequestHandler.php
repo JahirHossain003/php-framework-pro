@@ -9,8 +9,8 @@ use Psr\Container\ContainerInterface;
 class RequestHandler implements RequestHandlerInterface
 {
     private array $middleware = [
+        RouteMiddleware::class,
         StartSession::class,
-        Authenticate::class,
         RouterDispatch::class
     ];
 
@@ -27,5 +27,9 @@ class RequestHandler implements RequestHandlerInterface
         $middlewareClass = array_shift($this->middleware);
         $middleware = $this->container->get($middlewareClass);
         return $middleware->process($request, $this);
+    }
+
+    public function injectMiddleware(array $middlewares) {
+        array_splice($this->middleware, 0,0,$middlewares);
     }
 }

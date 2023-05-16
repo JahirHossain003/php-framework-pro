@@ -35,9 +35,6 @@ $container->add('base-command-namespace', new StringArgument('Jahir\\Framework\\
 ## Services
 $container->add(RouterInterface::class, Router::class);
 
-$container->extend(RouterInterface::class)
-    ->addMethodCall('setRoutes', [new ArrayArgument($routes)]);
-
 $container->add(
     \Jahir\Framework\Http\Middleware\RequestHandlerInterface::class,
     \Jahir\Framework\Http\Middleware\RequestHandler::class)
@@ -97,5 +94,8 @@ $container->add(\Jahir\Framework\Authentication\SessionAuthentication::class)
         \App\Repository\UserRepository::class,
         \Jahir\Framework\Session\SessionInterface::class
     ]);
+
+$container->add(\Jahir\Framework\Http\Middleware\RouteMiddleware::class)
+    ->addArgument($routes);
 
 return $container;

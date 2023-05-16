@@ -8,6 +8,10 @@ class Request
 {
     private SessionInterface $session;
 
+    private mixed $handler;
+
+    private array $handlerArgs;
+
     public function __construct(
         public readonly array $getParams,
         public readonly array $postParams,
@@ -45,5 +49,37 @@ class Request
     public function input($key): mixed
     {
         return $this->postParams[$key];
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getHandler(): mixed
+    {
+        return $this->handler;
+    }
+
+    /**
+     * @param mixed $handler
+     */
+    public function setHandler(mixed $handler): void
+    {
+        $this->handler = $handler;
+    }
+
+    /**
+     * @return array
+     */
+    public function getHandlerArgs(): array
+    {
+        return $this->handlerArgs;
+    }
+
+    /**
+     * @param array $handlerArgs
+     */
+    public function setHandlerArgs(array $handlerArgs): void
+    {
+        $this->handlerArgs = $handlerArgs;
     }
 }
