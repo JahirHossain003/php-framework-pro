@@ -14,6 +14,7 @@ return [
   ['GET', '/register', [RegistrationController::class, 'index', [\Jahir\Framework\Http\Middleware\Guest::class]]],
   ['POST', '/register', [RegistrationController::class, 'register']],
   ['GET', '/login', [LoginController::class, 'index', [\Jahir\Framework\Http\Middleware\Guest::class]]],
+  ['GET', '/logout', [LoginController::class, 'logout', [\Jahir\Framework\Http\Middleware\Authenticate::class]]],
   ['POST', '/login', [LoginController::class, 'login']],
   ['GET', '/dashboard', [DashboardController::class, 'index', [
       \Jahir\Framework\Http\Middleware\Authenticate::class

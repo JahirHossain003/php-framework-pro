@@ -5,6 +5,7 @@ namespace Jahir\Framework\Http\Middleware;
 use Jahir\Framework\Http\RedirectResponse;
 use Jahir\Framework\Http\Request;
 use Jahir\Framework\Http\Response;
+use Jahir\Framework\Session\Session;
 use Jahir\Framework\Session\SessionInterface;
 
 class Guest implements MiddlewareInterface
@@ -17,7 +18,7 @@ class Guest implements MiddlewareInterface
     {
         $this->session->start();
 
-        if ($this->session->has('auth_id')) {
+        if ($this->session->has(Session::AUTH_KEY)) {
             return new RedirectResponse('/dashboard');
         }
 

@@ -5,13 +5,17 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\RegistrationForm;
 use App\Repository\UserDataMapper;
+use Jahir\Framework\Authentication\SessionAuthentication;
 use Jahir\Framework\Controller\AbstractController;
 use Jahir\Framework\Http\RedirectResponse;
 use Jahir\Framework\Http\Response;
 
 class RegistrationController extends AbstractController
 {
-    public function __construct(private UserDataMapper $dataMapper)
+    public function __construct(
+        private UserDataMapper $dataMapper,
+        private SessionAuthentication $authComponent
+    )
     {
     }
 
@@ -41,8 +45,9 @@ class RegistrationController extends AbstractController
 
         if ($user instanceof User) {
             $this->request->getSession()->setFlash('success', 'User has been created successfully');
+            $this->authComponent->login($user);
         }
 
-        return new RedirectResponse("/register");
+        return new RedirectResponse("/dashboard");
     }
 }

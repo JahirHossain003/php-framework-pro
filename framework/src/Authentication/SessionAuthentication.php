@@ -2,6 +2,7 @@
 
 namespace Jahir\Framework\Authentication;
 
+use Jahir\Framework\Session\Session;
 use Jahir\Framework\Session\SessionInterface;
 
 class SessionAuthentication implements SessionAuthInterface
@@ -39,14 +40,14 @@ class SessionAuthentication implements SessionAuthInterface
     {
         $this->session->start();
 
-        $this->session->set('auth_id', $user->getAuthId());
+        $this->session->set(Session::AUTH_KEY, $user->getAuthId());
 
         $this->user = $user;
     }
 
     public function logout()
     {
-        // TODO: Implement logout() method.
+        $this->session->remove(Session::AUTH_KEY);
     }
 
     public function getUser(): AuthUserInterface

@@ -42,4 +42,11 @@ class LoginController extends AbstractController
         // Redirect the user to intended location
         return new RedirectResponse('/dashboard');
     }
+
+    public function logout(): Response
+    {
+        $this->authComponent->logout();
+        $this->request->getSession()->setFlash('success', 'You are successfully logged out');
+        return new RedirectResponse('/login');
+    }
 }

@@ -21,4 +21,6 @@ interface SessionInterface
     public function clearFlash(): void;
 
     public function start(): void;
+
+    public function isAuthenticated(): bool;
 }
