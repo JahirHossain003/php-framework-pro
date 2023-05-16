@@ -7,7 +7,7 @@ use Jahir\Framework\Http\Request;
 use Jahir\Framework\Http\Response;
 use Jahir\Framework\Session\SessionInterface;
 
-class Authenticate implements MiddlewareInterface
+class Guest implements MiddlewareInterface
 {
     public function __construct(private SessionInterface $session)
     {
@@ -17,9 +17,8 @@ class Authenticate implements MiddlewareInterface
     {
         $this->session->start();
 
-        if (!$this->session->has('auth_id')) {
-            $this->session->setFlash('error', 'Please log in');
-            return new RedirectResponse('/login');
+        if ($this->session->has('auth_id')) {
+            return new RedirectResponse('/dashboard');
         }
 
         return $handler->handle($request, $handler);
