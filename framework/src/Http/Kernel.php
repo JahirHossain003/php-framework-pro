@@ -2,9 +2,11 @@
 
 namespace Jahir\Framework\Http;
 
+use Jahir\Framework\Http\Event\ResponseEvent;
 use Jahir\Framework\Http\Exception\HttpException;
 use Jahir\Framework\Http\Middleware\RequestHandlerInterface;
 use Psr\Container\ContainerInterface;
+use Psr\EventDispatcher\EventDispatcherInterface;
 
 class Kernel
 {
@@ -12,7 +14,8 @@ class Kernel
 
     public function __construct(
         private ContainerInterface $container,
-        private RequestHandlerInterface $handler
+        private RequestHandlerInterface $handler,
+        private EventDispatcherInterface $eventDispatcher
     )
     {
         $this->appEnv = $this->container->get('APP_ENV');
@@ -25,6 +28,8 @@ class Kernel
         } catch (\Exception $exception) {
             $response = $this->createExceptionResponse($exception);
         }
+
+        $this->eventDispatcher->dispatch(new ResponseEvent($response, $request));
 
         return $response;
     }

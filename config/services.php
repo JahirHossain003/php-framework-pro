@@ -47,10 +47,13 @@ $container->add(
    $container
 ]);
 
+$container->addShared(\Jahir\Framework\EventDispatcher\EventDispatcher::class);
+
 $container->add(Kernel::class)
     ->addArguments([
         $container,
-        \Jahir\Framework\Http\Middleware\RequestHandlerInterface::class
+        \Jahir\Framework\Http\Middleware\RequestHandlerInterface::class,
+        \Jahir\Framework\EventDispatcher\EventDispatcher::class
         ]);
 
 $container->add(Application::class)
