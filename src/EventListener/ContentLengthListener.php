@@ -1,6 +1,6 @@
 <?php
 
-namespace Jahir\Framework\EventListener;
+namespace App\EventListener;
 
 use Jahir\Framework\Http\Event\ResponseEvent;
 
