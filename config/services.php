@@ -8,25 +8,24 @@ use Jahir\Framework\Dbal\ConnectionFactory;
 use Jahir\Framework\Http\Kernel;
 use Jahir\Framework\Routing\Router;
 use Jahir\Framework\Routing\RouterInterface;
-use League\Container\Argument\Literal\ArrayArgument;
 use League\Container\Argument\Literal\StringArgument;
 use League\Container\Container;
 use League\Container\ReflectionContainer;
 use Symfony\Component\Dotenv\Dotenv;
-use Twig\Environment;
-use Twig\Loader\FilesystemLoader;
+
+$basePath = dirname(__DIR__);
 
 $dotEnv = new Dotenv();
-$dotEnv->load(BASE_PATH.'/.env');
+$dotEnv->load($basePath.'/.env');
 
 $container = new Container();
 $container->delegate(new ReflectionContainer(true));
+$container->add('basePath', new StringArgument($basePath));
 
+$routes = include $basePath.'/route/web.php';
+$templatePath = $basePath.'/templates';
 
-$routes = include BASE_PATH.'/route/web.php';
-$templatePath = BASE_PATH.'/templates';
-
-$databaseUrl = 'sqlite:///' . BASE_PATH . '/var/db.sqlite';
+$databaseUrl = 'sqlite:///' . $basePath . '/var/db.sqlite';
 
 $container->add('APP_ENV', new StringArgument($_SERVER['APP_ENV']));
 
@@ -90,7 +89,7 @@ $container->addShared(Connection::class, function () use ($container): Connectio
 });
 
 $container->add('database:migrations:migrate', MigrateDatabase::class)
-    ->addArguments([Connection::class, new StringArgument(BASE_PATH.'/migration')]);
+    ->addArguments([Connection::class, new StringArgument($basePath.'/migration')]);
 
 $container->add(\Jahir\Framework\Authentication\SessionAuthentication::class)
     ->addArguments([
