@@ -2,17 +2,17 @@
 namespace App\Repository;
 
 use App\Entity\Post;
-use Doctrine\DBAL\Connection;
+use Jahir\Framework\Dbal\Event\DataMapper;
 
 class PostDataMapper
 {
-    public function __construct(private Connection $connection)
+    public function __construct(private DataMapper $dataMapper)
     {
     }
 
     public function save(Post $post): void {
 
-        $stmt = $this->connection->prepare(
+        $stmt = $this->dataMapper->getConnection()->prepare(
             '
             INSERT INTO posts (title, body, created_at)
             VALUES(:title, :body, :createdAt)
@@ -25,7 +25,7 @@ class PostDataMapper
 
         $stmt->executeStatement();
 
-        $postId = $this->connection->lastInsertId();
+        $postId = $this->dataMapper->save($post);
 
         $post->setId($postId);
     }

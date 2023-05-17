@@ -3,18 +3,18 @@
 namespace App\Repository;
 
 use App\Entity\User;
-use Doctrine\DBAL\Connection;
+use Jahir\Framework\Dbal\Event\DataMapper;
 
 class UserDataMapper
 {
-    public function __construct(private Connection $connection)
+    public function __construct(private DataMapper $dataMapper)
     {
     }
 
     public function save(User $user): void
     {
 
-        $stmt = $this->connection->prepare(
+        $stmt = $this->dataMapper->getConnection()->prepare(
             '
             INSERT INTO users (username, password, created_at)
             VALUES(:username, :password, :createdAt)
@@ -27,7 +27,7 @@ class UserDataMapper
 
         $stmt->executeStatement();
 
-        $userId = $this->connection->lastInsertId();
+        $userId = $this->dataMapper->save($user);
 
         $user->setId($userId);
     }

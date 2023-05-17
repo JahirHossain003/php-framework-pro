@@ -3,8 +3,9 @@
 namespace App\Entity;
 
 use Jahir\Framework\Authentication\AuthUserInterface;
+use Jahir\Framework\Dbal\Event\Entity;
 
-class User implements AuthUserInterface
+class User extends Entity implements AuthUserInterface
 {
     public function __construct(
         private ?int $id,

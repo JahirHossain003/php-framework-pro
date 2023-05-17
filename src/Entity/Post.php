@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Entity;
-class Post
+use Jahir\Framework\Dbal\Event\Entity;
+
+class Post extends Entity
 {
     public function __construct(
         private ?int $id,
