@@ -9,6 +9,8 @@ require_once BASE_PATH.'/vendor/autoload.php';
 
 $container = require BASE_PATH.'/config/services.php';
 
+require_once BASE_PATH.'/bootstrap/bootstrap.php';
+
 $request = Request::createFromGlobals();
 
 $kernel = $container->get(Kernel::class);
